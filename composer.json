@@ -1,0 +1,32 @@
+{
+    "name": "antonioprimera/laravel-js-i18n",
+    "description": "Laravel internationalization for JS frontend.",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "AntonioPrimera\\LaravelJsI18n\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Antonio Primera",
+            "email": "antonio@cus.ro"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=8.1",
+        "illuminate/console": ">=11.0"
+    },
+    "require-dev": {
+        "antonioprimera/filesystem": "^1.4",
+        "illuminate/support": ">=11.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "AntonioPrimera\\LaravelJsI18n\\Providers\\LaravelJsI18nServiceProvider"
+            ]
+        }
+    }
+}
