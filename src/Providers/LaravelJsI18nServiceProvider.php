@@ -2,7 +2,9 @@
 namespace AntonioPrimera\LaravelJsI18n\Providers;
 
 use AntonioPrimera\FileSystem\File;
+use AntonioPrimera\LaravelJsI18n\Console\Commands\InstallLaravelJsI18nPackage;
 use AntonioPrimera\LaravelJsI18n\Console\Commands\MergeLanguageFiles;
+use AntonioPrimera\LaravelJsI18n\Console\Commands\TestCliChoices;
 use Illuminate\Support\ServiceProvider;
 
 class LaravelJsI18nServiceProvider extends ServiceProvider
@@ -16,11 +18,12 @@ class LaravelJsI18nServiceProvider extends ServiceProvider
     {
 		$this->publishes([
 			__DIR__.'/../../config/js-i18n.php' => config_path('js-i18n.php'),
-		]);
+		], 'js-i18n-config');
 		
 		if ($this->app->runningInConsole()) {
 			$this->commands([
 				MergeLanguageFiles::class,
+				InstallLaravelJsI18nPackage::class
 			]);
 		}
 		
