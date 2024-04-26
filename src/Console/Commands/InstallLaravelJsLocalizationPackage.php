@@ -8,11 +8,14 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use function Laravel\Prompts\confirm;
+use function Laravel\Prompts\pause;
 
 class InstallLaravelJsLocalizationPackage extends Command
 {
     protected $signature = 'js-localization:install';
     protected $description = 'Install the Laravel JS Localization package.';
+	
+	protected bool $requiresNpmInstall = false;
 
     public function handle(): void
     {
@@ -20,23 +23,29 @@ class InstallLaravelJsLocalizationPackage extends Command
 		
 		//steps to install the package (as an array of callable functions)
 		$steps = [
-			//1. Symlink lang-watcher.js from this package to the root of the project
+			//Step: Symlink lang-watcher.js from this package to the root of the project
 			[$this, 'symlinkLangWatcher'],
 			
-			//2. Add the lang-watcher.js script to the scripts section of package.json as "lang": "node lang-watcher.js"
+			//Step: Add the lang-watcher.js script to the scripts section of package.json as "lang": "node lang-watcher.js"
 			[$this, 'addLangWatcherScriptToPackageJson'],
 			
-			//3. Ask the user if they want to publish the config file
+			//Step: Add "chalk" and "chokidar" as devDependencies in the package.json file
+			[$this, 'addChalkAndChokidarToPackageJson'],
+			
+			//Step: Ask the user if they want to publish the config file
 			[$this, 'askToPublishConfigFile'],
 			
-			//4. Check if the lang folder exists, if not, ask the user if they want to run "php artisan lang:publish" to publish the lang folder
+			//Step: Check if the lang folder exists, if not, ask the user if they want to run "php artisan lang:publish" to publish the lang folder
 			[$this, 'publishLangFolder'],
 			
-			//5. Ask the user if they want to add the SetLocale middleware to the web middleware group in the Kernel.php file
+			//Step: Ask the user if they want to add the SetLocale middleware to the web middleware group in the Kernel.php file
 			[$this, 'addSetLocaleMiddleware'],
 			
-			//6. Inform the user that they need to add the inertia plugin to the app.js file, where the app is created
-			[$this, 'informUserToAddInertiaPlugin']
+			//Step: Inform the user that they need to add the inertia plugin to the app.js file, where the app is created
+			[$this, 'informUserToAddInertiaPlugin'],
+			
+			//Step: Run "npm install" to install the new devDependencies
+			[$this, 'runNpmInstall']
 		];
 		
 		//run each step
@@ -49,7 +58,7 @@ class InstallLaravelJsLocalizationPackage extends Command
 
 	//--- Protected helpers -------------------------------------------------------------------------------------------
 	
-	//1. Symlink lang-watcher.js from this package to the root of the project
+	//Step: Symlink lang-watcher.js from this package to the root of the project
 	protected function symlinkLangWatcher(int $step, int $maxSteps): void
 	{
 		$this->info("[Step $step/$maxSteps] Symlinking lang-watcher.js...");
@@ -64,7 +73,7 @@ class InstallLaravelJsLocalizationPackage extends Command
 		}
 	}
 	
-	//2. Add the lang-watcher.js script to the scripts section of package.json as "lang": "node lang-watcher.js"
+	//Step: Add the lang-watcher.js script to the scripts section of package.json as "lang": "node lang-watcher.js"
 	protected function addLangWatcherScriptToPackageJson(int $step, int $maxSteps): void
 	{
 		$this->info("[Step $step/$maxSteps] Adding the lang-watcher.js script to the scripts section of the package.json file...");
@@ -80,7 +89,7 @@ class InstallLaravelJsLocalizationPackage extends Command
 		$this->info('The lang-watcher.js script has been added to the scripts section of the package.json file. You can now run "npm run lang" to watch for changes in the lang folder.');
 	}
 	
-	//3. Ask the user if they want to publish the config file
+	//Step: Ask the user if they want to publish the config file
 	protected function askToPublishConfigFile(int $step, int $maxSteps): void
 	{
 		$this->info("[Step $step/$maxSteps] Publishing the config file...");
@@ -100,7 +109,7 @@ class InstallLaravelJsLocalizationPackage extends Command
 		}
 	}
 	
-	//4. Check if the lang folder exists, if not, ask the user if they want to run "php artisan lang:publish" to publish the lang folder
+	//Step: Check if the lang folder exists, if not, ask the user if they want to run "php artisan lang:publish" to publish the lang folder
 	protected function publishLangFolder(int $step, int $maxSteps): void
 	{
 		$this->info("[Step $step/$maxSteps] Publishing the lang files if necessary...");
@@ -125,11 +134,18 @@ class InstallLaravelJsLocalizationPackage extends Command
 		}
 	}
 	
-	//5. Ask the user if they want to add the SetLocale middleware to the web middleware group in the bootstrap/app.php file
+	//Step: Ask the user if they want to add the SetLocale middleware to the web middleware group in the bootstrap/app.php file
 	protected function addSetLocaleMiddleware(int $step, int $maxSteps): void
 	{
-		$this->info("[Step $step/$maxSteps] Adding the SetLocale middleware to the web middleware group in bootstrap/app.php...");
 		$appFile = File::instance(base_path('bootstrap/app.php'));
+		
+		//if the middleware is already present in the app.php file, skip this step (no need to ask the user)
+		if ($appFile->exists() && str_contains($appFile->getContents(), SetLocale::class)) {
+			$this->info("[Step $step/$maxSteps] The SetLocale middleware is already present in the web middleware group in the bootstrap/app.php file. No action taken.");
+			return;
+		}
+		
+		$this->info("[Step $step/$maxSteps] Adding the SetLocale middleware to the web middleware group in bootstrap/app.php...");
 		
 		$confirm = confirm(
 			label: 'Do you want to add the SetLocale middleware to the web middleware group in the bootstrap/app.php file?',
@@ -168,7 +184,7 @@ class InstallLaravelJsLocalizationPackage extends Command
 		$this->info('The SetLocale middleware has been added to the web middleware group in the bootstrap/app.php file.');
 	}
 	
-	//6. Inform the user that they need to add the inertia plugin to the app.js file, where the app is created
+	//Step: Inform the user that they need to add the inertia plugin to the app.js file, where the app is created
 	protected function informUserToAddInertiaPlugin(int $step, int $maxSteps): void
 	{
 		$this->info("[Step $step/$maxSteps] This step is not automated, because it depends on the structure and setup of your app.");
@@ -183,6 +199,57 @@ class InstallLaravelJsLocalizationPackage extends Command
 		
 		$this->newLine();
 		$this->info('This will make the translator available in all Inertia views.');
+		pause('Once you have read the information above and added the necessary code to your project, press any key to continue...');
+	}
+	
+	//Step: Add "chalk" and "chokidar" as devDependencies in the package.json file
+	protected function addChalkAndChokidarToPackageJson(int $step, int $maxSteps): void
+	{
+		$this->info("[Step $step/$maxSteps] Adding 'chalk' and 'chokidar' as devDependencies in the package.json file as devDependencies...");
+		$packageJsonFile = File::instance(base_path('package.json'));
+		if (!$packageJsonFile->exists()) {
+			$this->error('The package.json file does not exist. Please create it first.');
+			return;
+		}
+		
+		$packageJson = json_decode($packageJsonFile->getContents(), true);
+		
+		//check if chalk and chokidar are already in the devDependencies
+		$requiresChalk = !(Arr::has($packageJson, 'devDependencies.chalk') || Arr::has($packageJson, 'dependencies.chalk'));
+		$requiresChokidar = !(Arr::has($packageJson, 'devDependencies.chokidar') || Arr::has($packageJson, 'dependencies.chokidar'));
+		if (!$requiresChalk && !$requiresChokidar) {
+			$this->info('The devDependencies "chalk" and "chokidar" are already present in the package.json file. No action taken.');
+			return;
+		}
+		
+		//add chalk and chokidar to the devDependencies
+		if ($requiresChalk)
+			$packageJson['devDependencies']['chalk'] = '^5.3.0';
+		
+		if ($requiresChokidar)
+			$packageJson['devDependencies']['chokidar'] = '^3.6.0';
+		
+		$packageJsonFile->putContents(json_encode($packageJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+		$this->info('The devDependencies "chalk" and "chokidar" have been added to the package.json file.');
+		$this->requiresNpmInstall = true;
+	}
+	
+	//Step: Run "npm install" to install the new devDependencies
+	protected function runNpmInstall(int $step, int $maxSteps): void
+	{
+		if (!$this->requiresNpmInstall) {
+			return;
+		}
+		
+		$this->info("[Step $step/$maxSteps] Running 'npm install' to install the new devDependencies...");
+		
+		exec('npm install', $output, $returnCode);
+		if ($returnCode !== 0) {
+			$this->error('An error occurred while running "npm install". Please run "npm install" manually to install the new devDependencies.');
+			return;
+		}
+		
+		$this->info('The new devDependencies have been installed successfully.');
 	}
 	
 }

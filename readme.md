@@ -28,14 +28,16 @@ This will do the following things:
 
 1. Create a symlink for the language watcher js file in your project's root directory.
 2. Add the 'lang' npm script to your package.json file, so you can run 'npm run lang' to start the language watcher.
-3. Optionally publish the package configuration file (you can also do this manually with `php artisan vendor:publish --tag=js-localization-config`).
-4. Optionally publish the language files, if no "lang" folder exists in your project's root directory (you can also do this manually with `php artisan lang:publish`).
-5. Optionally add the SetLocale middleware to the web middleware group in your bootstrap/app.php file.
-6. Provide you with the necessary steps to manually add the localization Inertia plugin to your Vue3 app.
+3. Add the 'chalk' and 'chokidar' npm packages to your package.json file, which are required for the language watcher.
+4. Optionally publish the package configuration file (you can also do this manually with `php artisan vendor:publish --tag=js-localization-config`).
+5. Optionally publish the language files, if no "lang" folder exists in your project's root directory (you can also do this manually with `php artisan lang:publish`).
+6. Optionally add the SetLocale middleware to the web middleware group in your bootstrap/app.php file.
+7. Provide you with the necessary steps to manually add the localization Inertia plugin to your Vue3 app.
+8. Run 'npm install' to install the newly added npm packages.
 
 **Warning!!!**
 
-The install command contains some automated steps, which will inject code into your files. While it tries to be as safe as possible, it is always recommended to check the changes made to your files
+The `install` command contains some automated steps, which will inject code into your files. While it tries to be as safe as possible, it is always recommended to check the changes made to your files
 and to have a clean git history, so you can easily revert the changes if something goes wrong.
 
 ## Usage
