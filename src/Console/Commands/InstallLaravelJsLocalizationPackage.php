@@ -93,6 +93,11 @@ class InstallLaravelJsLocalizationPackage extends Command
 	protected function askToPublishConfigFile(int $step, int $maxSteps): void
 	{
 		$this->info("[Step $step/$maxSteps] Publishing the config file...");
+		if (File::instance(base_path('config/js-localization.php'))->exists()) {
+			$this->info('The config file already exists. No action taken.');
+			return;
+		}
+		
 		$publishConfig = confirm(
 			label: 'Do you want to publish the config file?',
 			default: true,
