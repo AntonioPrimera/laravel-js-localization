@@ -25,7 +25,10 @@
         "laravel": {
             "providers": [
                 "AntonioPrimera\\LaravelJsLocalization\\Providers\\LaravelJsLocalizationServiceProvider"
-            ]
+            ],
+            "aliases": {
+                "LocaleManager": "AntonioPrimera\\LaravelJsLocalization\\Facades\\LocaleManager"
+            }
         }
     }
 }

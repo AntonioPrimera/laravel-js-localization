@@ -78,3 +78,54 @@ but expects a number as the second argument, which is used to determine the plur
     </div>
 </template>
 ```
+
+### LocaleManager
+
+The package also provides a `LocaleManager` facade, which you can use to work with locales in your Laravel app. The facade provides the following methods:
+
+```php
+use AntonioPrimera\LaravelJsLocalization\Facades\LocaleManager;
+
+// Get all the available locales via: config('app.available_locales', ['en'])
+$locales = LocaleManager::availableLocales();
+
+// Get the default locale via: config('app.locale', 'en')
+$defaultLocale = LocaleManager::defaultLocale();
+
+// Get the fallback locale via: config('app.fallback_locale', 'en')
+$fallbackLocale = LocaleManager::fallbackLocale();
+
+// Get the current locale via: app()->getLocale()
+$locale = LocaleManager::currentLocale();
+
+// Set the locale for the current request and store it in the session
+LocaleManager::setLocale('en');
+
+// Store the locale in the session (will not change the current locale)
+LocaleManager::setSessionLocale('en');
+
+// Get the locale from the session
+$locale = LocaleManager::sessionLocale();
+
+// Check if a locale is available (checks the available locales)
+$available = LocaleManager::isValidLocale('en');
+```
+
+
+### SetLocale Middleware
+
+The package also provides a `SetLocale` middleware, which will get the locale from the session and set it for the current request.
+
+If you want to change the site locale for the next requests, you can use the `LocaleManager::setLocale(...)` method, which will store the locale in the session,
+so the `SetLocale` middleware can pick it up for the next requests.
+
+If you want to create a language switcher, you can create a route that sets the locale in the session and redirects back to the previous page.
+
+```php
+use AntonioPrimera\LaravelJsLocalization\Facades\LocaleManager;
+
+Route::get('set-locale/{locale}', function ($locale) {
+    LocaleManager::setSessionLocale($locale);
+    return back();
+})->name('set-locale');
+```
