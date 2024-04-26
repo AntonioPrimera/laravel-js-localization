@@ -1,5 +1,5 @@
 <?php
-namespace AntonioPrimera\LaravelJsI18n\Console\Commands;
+namespace AntonioPrimera\LaravelJsLocalization\Console\Commands;
 
 use AntonioPrimera\FileSystem\File;
 use AntonioPrimera\FileSystem\Folder;
@@ -83,6 +83,6 @@ class MergeLanguageFiles extends Command
 	//the root folder where the locale folders are stored, as a Folder instance
 	protected function languageFolder(): Folder
 	{
-		return Folder::instance(base_path(config('js-i18n.language-folder')));
+		return Folder::instance(base_path(config('js-localization.language-folder')));
 	}
 }

@@ -1,5 +1,5 @@
 <?php
-namespace AntonioPrimera\LaravelJsI18n\Http\Middleware;
+namespace AntonioPrimera\LaravelJsLocalization\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;

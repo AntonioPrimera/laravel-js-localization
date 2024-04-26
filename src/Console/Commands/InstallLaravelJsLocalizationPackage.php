@@ -1,22 +1,22 @@
 <?php
-namespace AntonioPrimera\LaravelJsI18n\Console\Commands;
+namespace AntonioPrimera\LaravelJsLocalization\Console\Commands;
 
 use AntonioPrimera\FileSystem\File;
 use AntonioPrimera\FileSystem\Folder;
-use AntonioPrimera\LaravelJsI18n\Http\Middleware\SetLocale;
+use AntonioPrimera\LaravelJsLocalization\Http\Middleware\SetLocale;
 use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use function Laravel\Prompts\confirm;
 
-class InstallLaravelJsI18nPackage extends Command
+class InstallLaravelJsLocalizationPackage extends Command
 {
-    protected $signature = 'js-i18n:install';
-    protected $description = 'Install the Laravel JS i18n package.';
+    protected $signature = 'js-localization:install';
+    protected $description = 'Install the Laravel JS Localization package.';
 
     public function handle(): void
     {
-        $this->info('Installing the Laravel JS i18n package...');
+        $this->info('Installing the Laravel JS Localization package...');
 		
 		//steps to install the package (as an array of callable functions)
 		$steps = [
@@ -87,14 +87,14 @@ class InstallLaravelJsI18nPackage extends Command
 		$publishConfig = confirm(
 			label: 'Do you want to publish the config file?',
 			default: true,
-			yes: 'Publish the config file to config/js-i18n.php',
+			yes: 'Publish the config file to config/js-localization.php',
 			no: 'Do not publish the config file',
-			hint: 'You can always publish the config file later by running "php artisan vendor:publish --tag=js-i18n-config"'
+			hint: 'You can always publish the config file later by running "php artisan vendor:publish --tag=js-localization-config"'
 		);
 		
 		if ($publishConfig) {
-			$this->call('vendor:publish', ['--tag' => 'js-i18n-config']);
-			$this->info('The config file has been published successfully to config/js-i18n.php');
+			$this->call('vendor:publish', ['--tag' => 'js-localization-config']);
+			$this->info('The config file has been published successfully to config/js-localization.php');
 		} else {
 			$this->info('The config file has not been published.');
 		}
@@ -131,6 +131,17 @@ class InstallLaravelJsI18nPackage extends Command
 		$this->info("[Step $step/$maxSteps] Adding the SetLocale middleware to the web middleware group in bootstrap/app.php...");
 		$appFile = File::instance(base_path('bootstrap/app.php'));
 		
+		$confirm = confirm(
+			label: 'Do you want to add the SetLocale middleware to the web middleware group in the bootstrap/app.php file?',
+			default: true,
+			hint: 'This will automatically set the locale based on the locale stored in the session. You can always add the middleware manually by adding \AntonioPrimera\LaravelJsLocalization\Http\Middleware\SetLocale::class to the $middleware->web() group in the bootstrap/app.php file.'
+		);
+		
+		if (!$confirm) {
+			$this->info('The SetLocale middleware has not been added.');
+			return;
+		}
+		
 		if (!$appFile->exists()) {
 			$this->error('The bootstrap/app.php file does not exist. The SetLocale middleware could not be added.');
 			return;
@@ -150,7 +161,7 @@ class InstallLaravelJsI18nPackage extends Command
 			return;
 		}
 		
-		$setLocaleMiddleware = '\AntonioPrimera\LaravelJsI18n\Http\Middleware\SetLocale::class,';
+		$setLocaleMiddleware = '\AntonioPrimera\LaravelJsLocalization\Http\Middleware\SetLocale::class,';
 		$appContent = substr_replace($appContent, $setLocaleMiddleware . PHP_EOL, $middlewareWebIndex, 0);
 		$appFile->putContents($appContent);
 		
@@ -164,8 +175,8 @@ class InstallLaravelJsI18nPackage extends Command
 		$this->info('Add the following lines to your resources/js/app.js file, where the app is created:');
 		
 		$this->newLine();
-		$this->info('//import the translator plugin from the Laravel JS i18n package');
-		$this->info('import {translatorPlugin} from "../../vendor/antonioprimera/laravel-js-i18n/resources/js/InertiaPlugins/vue3Translator";');
+		$this->info('//import the translator plugin from the Laravel JS Localization package');
+		$this->info('import {translatorPlugin} from "../../vendor/antonioprimera/laravel-js-localization/resources/js/InertiaPlugins/vue3Translator";');
 		$this->newLine();
 		$this->info('//add the translator plugin to the app (before the .mount() method)');
 		$this->info('.use(translatorPlugin);');

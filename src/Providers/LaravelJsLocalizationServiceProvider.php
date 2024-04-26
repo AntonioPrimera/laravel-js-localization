@@ -1,29 +1,34 @@
 <?php
-namespace AntonioPrimera\LaravelJsI18n\Providers;
+namespace AntonioPrimera\LaravelJsLocalization\Providers;
 
 use AntonioPrimera\FileSystem\File;
-use AntonioPrimera\LaravelJsI18n\Console\Commands\InstallLaravelJsI18nPackage;
-use AntonioPrimera\LaravelJsI18n\Console\Commands\MergeLanguageFiles;
-use AntonioPrimera\LaravelJsI18n\Console\Commands\TestCliChoices;
+use AntonioPrimera\LaravelJsLocalization\Console\Commands\InstallLaravelJsLocalizationPackage;
+use AntonioPrimera\LaravelJsLocalization\Console\Commands\MergeLanguageFiles;
+use AntonioPrimera\LaravelJsLocalization\LocaleManager;
 use Illuminate\Support\ServiceProvider;
 
-class LaravelJsI18nServiceProvider extends ServiceProvider
+class LaravelJsLocalizationServiceProvider extends ServiceProvider
 {
 	public function register(): void
 	{
-		$this->mergeConfigFrom(__DIR__.'/../../config/js-i18n.php', 'js-i18n');
+		$this->mergeConfigFrom(__DIR__.'/../../config/js-localization.php', 'js-localization');
+		
+		//register the LocaleManager class in the service container
+		$this->app->singleton('locale-manager', LocaleManager::class);
 	}
 	
     public function boot(): void
     {
+		//publish the config file
 		$this->publishes([
-			__DIR__.'/../../config/js-i18n.php' => config_path('js-i18n.php'),
-		], 'js-i18n-config');
+			__DIR__.'/../../config/js-localization.php' => config_path('js-localization.php'),
+		], 'js-localization-config');
 		
+		//register the artisan commands
 		if ($this->app->runningInConsole()) {
 			$this->commands([
 				MergeLanguageFiles::class,
-				InstallLaravelJsI18nPackage::class
+				InstallLaravelJsLocalizationPackage::class
 			]);
 		}
 		

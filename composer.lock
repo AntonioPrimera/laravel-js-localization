@@ -4,8 +4,51 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "460213c51f306b0a907f505af7c9068c",
+    "content-hash": "0ce97ee5b917d5787648ed168dc75ec0",
     "packages": [
+        {
+            "name": "antonioprimera/filesystem",
+            "version": "v1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/AntonioPrimera/filesystem.git",
+                "reference": "34e2b583594980ef235dd229da1dccf5840e0689"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/AntonioPrimera/filesystem/zipball/34e2b583594980ef235dd229da1dccf5840e0689",
+                "reference": "34e2b583594980ef235dd229da1dccf5840e0689",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^10"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "AntonioPrimera\\FileSystem\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Antonio Primera",
+                    "email": "antonio@cus.ro"
+                }
+            ],
+            "description": "A simple set of File and Folder classes to easily manage files and folders operations",
+            "support": {
+                "issues": "https://github.com/AntonioPrimera/filesystem/issues",
+                "source": "https://github.com/AntonioPrimera/filesystem/tree/v1.4"
+            },
+            "time": "2023-12-01T12:29:24+00:00"
+        },
         {
             "name": "carbonphp/carbon-doctrine-types",
             "version": "dev-main",
@@ -782,12 +825,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/view.git",
-                "reference": "56e3b87057410ccf3cfbba9b2af0fbf6806f1e0d"
+                "reference": "a3768117b6d7c890bfde1be0f74ebf91db34a872"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/view/zipball/56e3b87057410ccf3cfbba9b2af0fbf6806f1e0d",
-                "reference": "56e3b87057410ccf3cfbba9b2af0fbf6806f1e0d",
+                "url": "https://api.github.com/repos/illuminate/view/zipball/a3768117b6d7c890bfde1be0f74ebf91db34a872",
+                "reference": "a3768117b6d7c890bfde1be0f74ebf91db34a872",
                 "shasum": ""
             },
             "require": {
@@ -828,7 +871,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2024-04-15T12:21:59+00:00"
+            "time": "2024-04-24T19:52:48+00:00"
         },
         {
             "name": "laravel/prompts",
@@ -836,12 +879,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/prompts.git",
-                "reference": "bf9a360c484976692de0f3792f30066f4f4b34a2"
+                "reference": "1d2535d13dfd8b648adbced865e5e60fe5bf1330"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/prompts/zipball/bf9a360c484976692de0f3792f30066f4f4b34a2",
-                "reference": "bf9a360c484976692de0f3792f30066f4f4b34a2",
+                "url": "https://api.github.com/repos/laravel/prompts/zipball/1d2535d13dfd8b648adbced865e5e60fe5bf1330",
+                "reference": "1d2535d13dfd8b648adbced865e5e60fe5bf1330",
                 "shasum": ""
             },
             "require": {
@@ -882,11 +925,12 @@
             "license": [
                 "MIT"
             ],
+            "description": "Add beautiful and user-friendly forms to your command-line applications.",
             "support": {
                 "issues": "https://github.com/laravel/prompts/issues",
                 "source": "https://github.com/laravel/prompts/tree/main"
             },
-            "time": "2024-04-18T00:45:25+00:00"
+            "time": "2024-04-26T14:30:06+00:00"
         },
         {
             "name": "nesbot/carbon",
@@ -2498,54 +2542,12 @@
             "time": "2022-03-08T17:03:00+00:00"
         }
     ],
-    "packages-dev": [
-        {
-            "name": "antonioprimera/filesystem",
-            "version": "v1.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/AntonioPrimera/filesystem.git",
-                "reference": "34e2b583594980ef235dd229da1dccf5840e0689"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/AntonioPrimera/filesystem/zipball/34e2b583594980ef235dd229da1dccf5840e0689",
-                "reference": "34e2b583594980ef235dd229da1dccf5840e0689",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.1"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^10"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "AntonioPrimera\\FileSystem\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Antonio Primera",
-                    "email": "antonio@cus.ro"
-                }
-            ],
-            "description": "A simple set of File and Folder classes to easily manage files and folders operations",
-            "support": {
-                "issues": "https://github.com/AntonioPrimera/filesystem/issues",
-                "source": "https://github.com/AntonioPrimera/filesystem/tree/v1.4"
-            },
-            "time": "2023-12-01T12:29:24+00:00"
-        }
-    ],
+    "packages-dev": [],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "laravel/prompts": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

@@ -1,10 +1,10 @@
 {
-    "name": "antonioprimera/laravel-js-i18n",
-    "description": "Laravel internationalization for JS frontend.",
+    "name": "antonioprimera/laravel-js-localization",
+    "description": "Laravel localization for JS frontends.",
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "AntonioPrimera\\LaravelJsI18n\\": "src/"
+            "AntonioPrimera\\LaravelJsLocalization\\": "src/"
         }
     },
     "authors": [
@@ -24,7 +24,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "AntonioPrimera\\LaravelJsI18n\\Providers\\LaravelJsI18nServiceProvider"
+                "AntonioPrimera\\LaravelJsLocalization\\Providers\\LaravelJsLocalizationServiceProvider"
             ]
         }
     }
