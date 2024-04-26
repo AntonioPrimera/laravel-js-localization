@@ -11,7 +11,7 @@ class LaravelJsLocalizationServiceProvider extends ServiceProvider
 {
 	public function register(): void
 	{
-		$this->mergeConfigFrom(__DIR__.'/../../config/js-localization.php', 'js-localization');
+		$this->mergeConfigFrom(__DIR__ . '/../../config/js-localization.php', 'js-localization');
 		
 		//register the LocaleManager class in the service container
 		$this->app->singleton('locale-manager', LocaleManager::class);
