@@ -104,7 +104,8 @@ Vue3 component.
 
 ### LocaleManager
 
-The package also provides a `LocaleManager` facade, which you can use to work with locales in your Laravel app. The facade provides the following methods:
+The package also provides a `LocaleManager` facade, which you can use to work with locales in your Laravel app.
+The facade provides the following methods:
 
 ```php
 use AntonioPrimera\LaravelJsLocalization\Facades\LocaleManager;
@@ -136,12 +137,14 @@ $available = LocaleManager::isValidLocale('en');
 
 ### SetLocale Middleware
 
-The package also provides a `SetLocale` middleware, which will get the locale from the session and set it for the current request.
+The package also provides a `SetLocale` middleware, which will get the locale from the session and set it for the
+current request.
 
-If you want to change the site locale for the next requests, you can use the `LocaleManager::setLocale(...)` method, which will store the locale in the session,
-so the `SetLocale` middleware can pick it up for the next requests.
+If you want to change the site locale for the next requests, you can use the `LocaleManager::setLocale(...)` method,
+which will store the locale in the session, so the `SetLocale` middleware can pick it up for the next requests.
 
-If you want to create a language switcher, you can create a route that sets the locale in the session and redirects back to the previous page.
+If you want to create a language switcher, you can create a route that sets the locale in the session and redirects
+back to the previous page.
 
 ```php
 use AntonioPrimera\LaravelJsLocalization\Facades\LocaleManager;
