@@ -1,5 +1,4 @@
 <?php
-
 namespace AntonioPrimera\LaravelJsLocalization\Console\Commands\InstallSteps;
 
 use AntonioPrimera\LaravelJsLocalization\Console\Commands\InstallSteps\Helpers\PackageJsonFile;

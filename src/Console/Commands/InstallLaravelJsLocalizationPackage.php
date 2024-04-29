@@ -11,21 +11,16 @@ use AntonioPrimera\LaravelJsLocalization\Console\Commands\InstallSteps\Helpers\S
 use AntonioPrimera\LaravelJsLocalization\Console\Commands\InstallSteps\PublishConfigFile;
 use AntonioPrimera\LaravelJsLocalization\Console\Commands\InstallSteps\PublishLangFiles;
 use Illuminate\Console\Command;
-use Laravel\Prompts\Prompt;
 
 class InstallLaravelJsLocalizationPackage extends Command
 {
     protected $signature = 'js-localization:install';
     protected $description = 'Install the Laravel JS Localization package.';
 	
-	protected array $stepInstances = [];
-	//protected bool $requiresNpmInstall = false;
-
     public function handle(): void
     {
         $this->info('Installing the Laravel JS Localization package...');
 		Console::instantiate($this->input, $this->output);	//this is used inside the steps, so they can output messages
-		Prompt::fallbackWhen(! $this->input->isInteractive() || windows_os() || app()->runningUnitTests());
 		
 		$steps = Steps::create([
 			//Symlink lang-watcher.js from this package to the root of the project

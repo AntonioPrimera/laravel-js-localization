@@ -3,7 +3,6 @@ namespace AntonioPrimera\LaravelJsLocalization\Console\Commands\InstallSteps;
 
 use AntonioPrimera\FileSystem\File;
 use AntonioPrimera\LaravelJsLocalization\Http\Middleware\SetLocale;
-use function Laravel\Prompts\confirm;
 
 class AddSetLocaleMiddleware extends InstallStep
 {
@@ -21,8 +20,8 @@ class AddSetLocaleMiddleware extends InstallStep
 		if (str_contains($appFileContents, SetLocale::class))
 			return $this->skippedNotNeeded('SetLocale is already present in the web middleware group in bootstrap/app.php. No action taken.');
 		
-		$confirm = confirm(
-			label: 'Do you want to add SetLocale to the web middleware group in the bootstrap/app.php file?',
+		$confirm = $this->confirm(
+			question: 'Do you want to add SetLocale to the web middleware group in the bootstrap/app.php file?',
 			default: true,
 			hint: 'It will try to inject code into your bootstrap/app.php file. If you changed the file structure, this step might fail or might produce unexpected results!',
 		);

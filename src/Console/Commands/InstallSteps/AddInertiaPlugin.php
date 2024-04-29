@@ -1,9 +1,7 @@
 <?php
-
 namespace AntonioPrimera\LaravelJsLocalization\Console\Commands\InstallSteps;
 
 use AntonioPrimera\LaravelJsLocalization\Console\Commands\InstallSteps\Helpers\Console;
-use function Laravel\Prompts\pause;
 
 class AddInertiaPlugin extends InstallStep
 {
@@ -33,7 +31,10 @@ class AddInertiaPlugin extends InstallStep
 			Console::instance()->line($message, $style);
 		});
 		
-		pause('Once you have read the information above and added the necessary code to your project, press any key to continue...');
+		$this->pause(
+			'Once you have read the information above and added the necessary code to your project, press any key to continue...',
+			'Please confirm that you have added the Inertia plugin to the app.js...',
+		);
 		
 		return null;
 	}

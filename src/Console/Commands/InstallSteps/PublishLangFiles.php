@@ -3,7 +3,6 @@ namespace AntonioPrimera\LaravelJsLocalization\Console\Commands\InstallSteps;
 
 use AntonioPrimera\FileSystem\Folder;
 use Illuminate\Support\Facades\Artisan;
-use function Laravel\Prompts\confirm;
 
 class PublishLangFiles extends InstallStep
 {
@@ -15,8 +14,8 @@ class PublishLangFiles extends InstallStep
 		if ($langFolder->exists())
 			return $this->skippedNotNeeded('The lang folder already exists. No action taken.');
 		
-		$publishLang = confirm(
-			label: 'Do you want to publish the default lang files?',
+		$publishLang = $this->confirm(
+			question: 'Do you want to publish the default lang files?',
 			default: true,
 			hint: 'You can always publish the lang folder later by running "php artisan lang:publish" or you can manually create the lang folder and add your language files.'
 		);

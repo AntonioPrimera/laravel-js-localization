@@ -1,11 +1,8 @@
 <?php
-
 namespace AntonioPrimera\LaravelJsLocalization\Console\Commands\InstallSteps;
 
 use AntonioPrimera\FileSystem\File;
-use Illuminate\Console\Concerns\CallsCommands;
 use Illuminate\Support\Facades\Artisan;
-use function Laravel\Prompts\confirm;
 
 class PublishConfigFile extends InstallStep
 {
@@ -14,8 +11,8 @@ class PublishConfigFile extends InstallStep
 		if (File::instance(base_path('config/js-localization.php'))->exists())
 			return $this->skippedNotNeeded('The js-localization.php config file already exists. No action taken.');
 		
-		$publishConfig = confirm(
-			label: 'Do you want to publish the config file?',
+		$publishConfig = $this->confirm(
+			question: 'Do you want to publish the config file?',
 			default: true,
 			hint: 'You can always publish the config file later by running "php artisan vendor:publish --tag=js-localization-config"'
 		);

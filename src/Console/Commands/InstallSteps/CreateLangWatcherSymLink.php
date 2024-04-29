@@ -1,5 +1,4 @@
 <?php
-
 namespace AntonioPrimera\LaravelJsLocalization\Console\Commands\InstallSteps;
 
 class CreateLangWatcherSymLink extends InstallStep

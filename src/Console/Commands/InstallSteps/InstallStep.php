@@ -3,6 +3,8 @@ namespace AntonioPrimera\LaravelJsLocalization\Console\Commands\InstallSteps;
 
 use AntonioPrimera\LaravelJsLocalization\Console\Commands\InstallSteps\Helpers\Console;
 use AntonioPrimera\LaravelJsLocalization\Console\Commands\InstallSteps\Helpers\Steps;
+use function Laravel\Prompts\confirm;
+use function Laravel\Prompts\pause;
 
 abstract class InstallStep
 {
@@ -58,6 +60,20 @@ abstract class InstallStep
 			self::STATUS_SKIPPED_NOT_NEEDED => $console->line( '<fg=gray>' . ($message ?? 'Step skipped because it was not needed. No changes were made.') . '</>'),
 			default => $console->line($message ?? $result ?? ''),
 		};
+	}
+	
+	protected function confirm(string $question, bool $default, string $hint = ''): bool
+	{
+		return windows_os()
+			? Console::instance()->confirm($question, $default)
+			: confirm(label: $question, default: $default, hint: $hint);
+	}
+	
+	protected function pause(string $message, string $confirmMessage = ''): void
+	{
+		windows_os()
+			? Console::instance()->confirm($confirmMessage ?: $message, true)
+			: pause($message);
 	}
 	
 	//--- Status helpers ----------------------------------------------------------------------------------------------
