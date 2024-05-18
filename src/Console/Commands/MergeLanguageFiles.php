@@ -54,8 +54,7 @@ class MergeLanguageFiles extends Command
     protected function getTranslationFilesForLocale(Folder $localeFolder): Collection
     {
         //get all php files in the locale folder (deep), remove the extension and replace directory separators with dots
-        return collect($localeFolder->allFiles())
-            ->filter(fn (File $file) => $file->extension === 'php')
+        return collect($localeFolder->getAllFiles('/\.php$/'))
             ->map(fn (File $file) => [
                 'file' => $file,
                 'key' => str_replace(
