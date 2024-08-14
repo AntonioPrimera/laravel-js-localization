@@ -5,6 +5,8 @@ use AntonioPrimera\FileSystem\File;
 use AntonioPrimera\LaravelJsLocalization\Console\Commands\InstallLaravelJsLocalizationPackage;
 use AntonioPrimera\LaravelJsLocalization\Console\Commands\MergeLanguageFiles;
 use AntonioPrimera\LaravelJsLocalization\LocaleManager;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 
 class LaravelJsLocalizationServiceProvider extends ServiceProvider
@@ -32,12 +34,15 @@ class LaravelJsLocalizationServiceProvider extends ServiceProvider
 			]);
 		}
 		
+		//set the locale (if a locale setter class is configured)
+		$this->setLocale();
+		
 		//check if Inertia is installed
 		if (!class_exists('Inertia\\Inertia'))
 			return;
 		
 		//prepare the locale and the dictionary file corresponding to the current locale
-        $locale = app()->getLocale();
+        $locale = App::getLocale();
         $dictionary = $this->translations($locale);
 
 		//share the locale and the dictionary to all Inertia views
@@ -54,4 +59,15 @@ class LaravelJsLocalizationServiceProvider extends ServiceProvider
             ? json_decode($translationsFile->getContents(), true)
             : [];
     }
+	
+	protected function setLocale(): void
+	{
+		//determine the locale setter class from the config (if not set, the locale will not be set)
+		$configuredLocaleSetterClass = Config::get('js-localization.locale-setter');
+		if (!$configuredLocaleSetterClass)
+			return;
+		
+		//set the locale (assuming the class has a setLocale method)
+		(new $configuredLocaleSetterClass())->setLocale();
+	}
 }

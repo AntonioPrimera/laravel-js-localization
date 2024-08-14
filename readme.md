@@ -31,8 +31,7 @@ This will do the following things:
 3. Add the `laravel-inertia-vue-translator`, `chalk` and `chokidar` npm packages to your package.json file. At the end it runs `npm install` to install the newly added npm packages.
 4. Optionally publish the package configuration file (you can also do this manually with `php artisan vendor:publish --tag=js-localization-config`).
 5. Optionally publish the language files, if no "lang" folder exists in your project's root directory (you can also do this manually with `php artisan lang:publish`).
-6. Optionally add the SetLocale middleware to the web middleware group in your bootstrap/app.php file.
-7. Provide you with the necessary steps to manually add the corresponding Inertia plugin to your Vue3 app (from package `laravel-inertia-vue-translator` installed in step 3).
+6. Provide you with the necessary steps to manually add the corresponding Inertia plugin to your Vue3 app (from package `laravel-inertia-vue-translator` installed in step 3).
 
 **Warning!!!**
 
@@ -122,6 +121,9 @@ $fallbackLocale = LocaleManager::fallbackLocale();
 // Get the current locale via: app()->getLocale()
 $locale = LocaleManager::currentLocale();
 
+// Get the locale for the authenticated user, fallback to the session locale and then to the default locale
+$userLocale = LocaleManager::authenticatedUserLocale();
+
 // Set the locale for the current request and store it in the session
 LocaleManager::setLocale('en');
 
@@ -135,24 +137,41 @@ $locale = LocaleManager::sessionLocale();
 $available = LocaleManager::isValidLocale('en');
 ```
 
-### SetLocale Middleware
+### Configuration
 
-The package also provides a `SetLocale` middleware, which will get the locale from the session and set it for the
-current request.
+The package configuration file is published in the `config` directory of your Laravel app, after running the `install`
+command. You can use this file to configure the package to your needs.
 
-If you want to change the site locale for the next requests, you can use the `LocaleManager::setLocale(...)` method,
-which will store the locale in the session, so the `SetLocale` middleware can pick it up for the next requests.
-
-If you want to create a language switcher, you can create a route that sets the locale in the session and redirects
-back to the previous page.
+Here is the default configuration file, with the default values explained:
 
 ```php
-use AntonioPrimera\LaravelJsLocalization\Facades\LocaleManager;
-
-Route::get('set-locale/{locale}', function ($locale) {
-    LocaleManager::setSessionLocale($locale);
-    return back();
-})->name('set-locale');
+return [
+	/**
+	 * The folder where the language files are stored, relative to the project root
+	 *
+	 * By default, the language files are stored in the 'lang' folder in the project root.
+	 */
+	'language-folder' => 'lang',
+	
+	/**
+	 * The class that sets the locale in the app
+	 *
+	 * This class must implement AntonioPrimera\LaravelJsLocalization\Interfaces\LocaleSetter.
+	 * By default, the UserSessionLocaleSetter is used, which tries to determine the locale from the authenticated user,
+	 * if a user is logged in, then falls back to the session locale, and finally to the default app locale.
+	 * Replace this with your own class if you have a different way of determining the locale.
+	 */
+	'locale-setter' => \AntonioPrimera\LaravelJsLocalization\LocaleSetters\UserSessionLocaleSetter::class,
+	
+	/**
+	 * The property of the authenticated user model that holds the locale
+	 *
+	 * If you have a property in your user model, that holds the locale of the user, you can set it here,
+	 * and the locale will be set to the value of this property when the user is authenticated.
+	 * You can leave it commented out if you don't have such a property on your user model.
+	 */
+	'user-locale-property' => 'language',
+];
 ```
 
 ### Related resources

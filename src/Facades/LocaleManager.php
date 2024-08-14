@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static string defaultLocale()
  * @method static string fallbackLocale()
  * @method static string currentLocale()
+ * @method static string|null authenticatedUserLocale()
  * @method static void setLocale(string $locale)
  * @method static void setSessionLocale(string $locale)
  * @method static string sessionLocale()

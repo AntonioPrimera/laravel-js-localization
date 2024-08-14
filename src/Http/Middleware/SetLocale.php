@@ -12,7 +12,7 @@ class SetLocale
     public function handle(Request $request, Closure $next): Response
     {
         //app()->setLocale(session()->get('locale', config('app.locale')));
-		app()->setLocale(LocaleManager::sessionLocale());
+		//app()->setLocale(LocaleManager::sessionLocale());
         return $next($request);
     }
 }

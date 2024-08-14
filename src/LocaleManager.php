@@ -1,43 +1,54 @@
 <?php
 namespace AntonioPrimera\LaravelJsLocalization;
 
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Session;
+
 class LocaleManager
 {
 	
 	public function availableLocales(): array
 	{
-		return config('app.locales', ['en']);
+		return Config::get('app.locales', ['en']);
 	}
 	
 	public function defaultLocale(): string
 	{
-		return config('app.locale', 'en');
+		return Config::get('app.locale', 'en');
 	}
 	
 	public function fallbackLocale()
 	{
-		return config('app.fallback_locale', 'en');
+		return Config::get('app.fallback_locale', 'en');
 	}
 	
 	public function currentLocale(): string
 	{
-		return app()->getLocale();
+		return App::getLocale();
+	}
+	
+	public function authenticatedUserLocale(): string|null
+	{
+		$localeProperty = Config::get('js-localization.user-locale-property');
+		return $localeProperty ? Auth::user()?->$localeProperty : null;
 	}
 	
 	public function setLocale(string $locale): void
 	{
-		app()->setLocale($locale);
+		App::setLocale($locale);
 		$this->setSessionLocale($locale);
 	}
 	
 	public function setSessionLocale(string $locale): void
 	{
-		session()->put('locale', $locale);
+		Session::put('locale', $locale);
 	}
 	
 	public function sessionLocale(): string
 	{
-		return session()->get('locale', $this->defaultLocale());
+		return Session::get('locale', $this->defaultLocale());
 	}
 	
 	public function isValidLocale(string $locale): bool

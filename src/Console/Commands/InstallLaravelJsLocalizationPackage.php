@@ -39,7 +39,7 @@ class InstallLaravelJsLocalizationPackage extends Command
 			PublishLangFiles::class,
 			
 			//Add the SetLocale middleware to the web middleware group in bootstrap/app.php
-			AddSetLocaleMiddleware::class,
+			//AddSetLocaleMiddleware::class,
 			
 			//Inform the user that they need to add the inertia plugin to the app.js file, where the app is created
 			AddInertiaPlugin::class,
