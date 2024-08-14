@@ -34,40 +34,40 @@ class LaravelJsLocalizationServiceProvider extends ServiceProvider
 			]);
 		}
 		
-		//set the locale (if a locale setter class is configured)
-		$this->setLocale();
+		////set the locale (if a locale setter class is configured)
+		//$this->setLocale();
 		
-		//check if Inertia is installed
-		if (!class_exists('Inertia\\Inertia'))
-			return;
-		
-		//prepare the locale and the dictionary file corresponding to the current locale
-        $locale = App::getLocale();
-        $dictionary = $this->translations($locale);
-
-		//share the locale and the dictionary to all Inertia views
-        \Inertia\Inertia::share(compact('locale', 'dictionary'));
+		////check if Inertia is installed
+		//if (!class_exists('Inertia\\Inertia'))
+		//	return;
+		//
+		////prepare the locale and the dictionary file corresponding to the current locale
+        //$locale = App::getLocale();
+        //$dictionary = $this->translations($locale);
+		//
+		////share the locale and the dictionary to all Inertia views
+        //\Inertia\Inertia::share(compact('locale', 'dictionary'));
     }
 
     //--- Protected helpers -------------------------------------------------------------------------------------------
 
-    protected function translations(string $locale): array
-    {
-        $translationsFile = File::instance(base_path("lang/_$locale.json"));
-
-        return $translationsFile->exists()
-            ? json_decode($translationsFile->getContents(), true)
-            : [];
-    }
+    //protected function translations(string $locale): array
+    //{
+    //    $translationsFile = File::instance(base_path("lang/_$locale.json"));
+	//
+    //    return $translationsFile->exists()
+    //        ? json_decode($translationsFile->getContents(), true)
+    //        : [];
+    //}
 	
-	protected function setLocale(): void
-	{
-		//determine the locale setter class from the config (if not set, the locale will not be set)
-		$configuredLocaleSetterClass = Config::get('js-localization.locale-setter');
-		if (!$configuredLocaleSetterClass)
-			return;
-		
-		//set the locale (assuming the class has a setLocale method)
-		(new $configuredLocaleSetterClass())->setLocale();
-	}
+	//protected function setLocale(): void
+	//{
+	//	//determine the locale setter class from the config (if not set, the locale will not be set)
+	//	$configuredLocaleSetterClass = Config::get('js-localization.locale-setter');
+	//	if (!$configuredLocaleSetterClass)
+	//		return;
+	//
+	//	//set the locale (assuming the class has a setLocale method)
+	//	(new $configuredLocaleSetterClass())->setLocale();
+	//}
 }
