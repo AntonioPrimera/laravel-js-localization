@@ -17,7 +17,7 @@
     "require": {
         "php": ">=8.1",
         "illuminate/console": ">=11.0",
-        "antonioprimera/filesystem": "^v1.6",
+        "antonioprimera/filesystem": "^v1.6|v2.2",
         "illuminate/support": ">=11.0",
         "illuminate/http": ">=11.0"
     },
