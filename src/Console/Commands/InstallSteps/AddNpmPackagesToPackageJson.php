@@ -65,11 +65,11 @@ class AddNpmPackagesToPackageJson extends InstallStep
 			'chokidar' => '^3.6.0',
 		];
 
-		if ($this->framework === 'vue') {
-			$packages['laravel-inertia-vue-translator'] = '^0.1.2';
-		} else {
-			$packages['laravel-inertia-react-translator'] = '^1.0.1';
-		}
+		match ($this->framework) {
+			'vue' => $packages['laravel-inertia-vue-translator'] = '^0.1.2',
+			'react' => $packages['laravel-inertia-react-translator'] = '^1.0.1',
+			default => null,
+		};
 
 		return $packages;
 	}
