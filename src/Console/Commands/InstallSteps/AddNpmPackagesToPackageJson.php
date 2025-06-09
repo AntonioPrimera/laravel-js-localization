@@ -7,7 +7,7 @@ use AntonioPrimera\LaravelJsLocalization\Console\Commands\InstallSteps\Helpers\P
 class AddNpmPackagesToPackageJson extends InstallStep
 {
 	public bool $updatedPackageJson = false;
-	protected string $framework = 'vue'; //default to vue, will be updated based on package.json content
+	private string $framework = 'vue'; //default to vue, will be updated based on package.json content
 
 	protected function handle(): array|string|null
 	{
