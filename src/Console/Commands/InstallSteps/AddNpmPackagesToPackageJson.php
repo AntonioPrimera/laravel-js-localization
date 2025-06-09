@@ -65,11 +65,16 @@ class AddNpmPackagesToPackageJson extends InstallStep
 			'chokidar' => '^3.6.0',
 		];
 
-		match ($this->framework) {
-			'vue' => $packages['laravel-inertia-vue-translator'] = '^0.1.2',
-			'react' => $packages['laravel-inertia-react-translator'] = '^1.0.1',
-			default => null,
-		};
+		switch ($this->framework) {
+			case 'vue':
+				$packages['laravel-inertia-vue-translator'] = '^0.1.2';
+				break;
+			case 'react':
+				$packages['laravel-inertia-react-translator'] = '^1.0.1';
+				break;
+			default:
+				return $this->failed('Unsupported frontend framework detected. Please use Vue or React.');
+		}
 
 		return $packages;
 	}
