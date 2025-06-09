@@ -1,6 +1,6 @@
-# Laravel JS Localization for Vue3 and InertiaJS
+# Laravel JS Localization for Vue3, React and InertiaJS
 
-This package provides a simple way to manage localization in Laravel with Vue3 and InertiaJS.
+This package provides a simple way to manage localization in Laravel with Vue3, React and InertiaJS.
 While it is very opinionated, it is also very simple to use and requires no additional configuration.
 
 ## How it works
@@ -28,7 +28,7 @@ This will do the following things:
 
 1. Create a symlink for the language watcher js file in your project's root directory.
 2. Add the 'lang' npm script to your package.json file, so you can run 'npm run lang' to start the language watcher.
-3. Add the `laravel-inertia-vue-translator`, `chalk` and `chokidar` npm packages to your package.json file. At the end it runs `npm install` to install the newly added npm packages.
+3. Add the `laravel-inertia-vue-translator` or `laravel-inertia-react-translator` depending on your frontend framework, `chalk` and `chokidar` npm packages to your package.json file. At the end it runs `npm install` to install the newly added npm packages.
 4. Optionally publish the package configuration file (you can also do this manually with `php artisan vendor:publish --tag=js-localization-config`).
 5. Optionally publish the language files, if no "lang" folder exists in your project's root directory (you can also do this manually with `php artisan lang:publish`).
 6. Provide you with the necessary steps to manually add the corresponding Inertia plugin to your Vue3 app (from package `laravel-inertia-vue-translator` installed in step 3).
@@ -49,7 +49,7 @@ Laravel. You can create several files for each language and each language corres
 At the moment, the package only supports the .php language files, but support for JSON files is planned for the future.
 
 While working with the language files, you should have the file watcher running, using the `npm run lang` command.
-The watcher creates a _<locale>.json file in the `lang` directory, for each found locale, which contains all the
+The watcher creates a \_<locale>.json file in the `lang` directory, for each found locale, which contains all the
 translations for that locale. These files are automatically shared with your InertiaJS app, so you can access the
 translations in your Vue3 components (only the translations for the current locale are shared).
 
@@ -68,18 +68,19 @@ return [
 
 The `laravel-inertia-vue-translator` package exports 2 helper functions, registered directly on the Inertia object,
 which you can use in your Vue3 templates to translate your strings:
+
 - txt(key, replacements = {}): This function is used to access the localized strings. It works similarly to the `__()`
-helper function in Laravel.
+  helper function in Laravel.
 - txts(key, count, replacements = {}): This function is used to access the pluralized localized strings. It works
-similarly to the `__()` helper function in Laravel, but expects a number as the second argument, which is used to
-determine the plural form of the string.
+  similarly to the `__()` helper function in Laravel, but expects a number as the second argument, which is used to
+  determine the plural form of the string.
 
 ```vue
 <template>
-    <div>
-        <h1>{{ txt('example.welcome') }}</h1>
-        <p>{{ txts('example.apples', 5, {name: 'Mary'} }}</p>
-    </div>
+  <div>
+    <h1>{{ txt("example.welcome") }}</h1>
+    <p>{{ txts('example.apples', 5, {name: 'Mary'} }}</p>
+  </div>
 </template>
 ```
 
@@ -89,16 +90,51 @@ Vue3 component.
 
 ```vue
 <script setup>
-    // Import the useTranslator function from the laravel-inertia-vue-translator package
-    import { useTranslator } from 'laravel-inertia-vue-translator';
-    
-    // Inject the txt(...) and txts(...) functions into the current Vue3 component
-    const { txt, txts } = useTranslator();
-	
-	// Use the txt(...) and txts(...) functions to access the localized strings
-    const welcome = txt('example.welcome');
-    const apples = txts('example.apples', 5, {name: 'Mary'});
+// Import the useTranslator function from the laravel-inertia-vue-translator package
+import { useTranslator } from "laravel-inertia-vue-translator";
+
+// Inject the txt(...) and txts(...) functions into the current Vue3 component
+const { txt, txts } = useTranslator();
+
+// Use the txt(...) and txts(...) functions to access the localized strings
+const welcome = txt("example.welcome");
+const apples = txts("example.apples", 5, { name: "Mary" });
 </script>
+```
+
+### Inertia + React
+
+The `laravel-inertia-react-translator` package exports a `TranslatorProvider` component, which you can use to wrap your
+Inertia app. This component provides the `txt(...)` helper function to your React components via the `useTranslator` hook.
+
+```tsx
+import React from "react";
+import { TranslatorProvider } from "laravel-inertia-react-translator";
+import { usePage } from "@inertiajs/react";
+
+const inertiaDictionary = () => usePage().props.dictionary;
+
+<TranslatorProvider getDictionary={inertiaDictionary}>
+  {/* your app */}
+</TranslatorProvider>;
+```
+
+You can then use the `useTranslator` hook in your React components to access the `txt(...)` helper function.
+
+```tsx
+import React from "react";
+import { useTranslator } from "laravel-inertia-react-translator";
+const MyComponent = () => {
+  const { txt } = useTranslator();
+
+  return (
+    <div>
+      <h1>{txt("example.welcome")}</h1>
+      <p>{txt("example.apples", 5, { name: "Mary" })}</p>
+    </div>
+  );
+};
+export default MyComponent;
 ```
 
 ### LocaleManager
@@ -152,7 +188,7 @@ return [
 	 * By default, the language files are stored in the 'lang' folder in the project root.
 	 */
 	'language-folder' => 'lang',
-	
+
 	/**
 	 * The class that sets the locale in the app
 	 *
@@ -162,7 +198,7 @@ return [
 	 * Replace this with your own class if you have a different way of determining the locale.
 	 */
 	'locale-setter' => \AntonioPrimera\LaravelJsLocalization\LocaleSetters\UserSessionLocaleSetter::class,
-	
+
 	/**
 	 * The property of the authenticated user model that holds the locale
 	 *
@@ -176,4 +212,5 @@ return [
 
 ### Related resources
 
-- [NPM Package: laravel-inertia-vue-translator](https://www.npmjs.com/package/laravel-inertia-vue-translator)
+- [Vue3 NPM Package: laravel-inertia-vue-translator](https://www.npmjs.com/package/laravel-inertia-vue-translator)
+- [React NPM Package: laravel-inertia-react-translator](https://www.npmjs.com/package/laravel-inertia-react-translator)
